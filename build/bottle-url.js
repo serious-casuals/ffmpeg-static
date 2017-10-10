@@ -2,8 +2,9 @@
 'use strict'
 
 const {isatty} = require('tty')
+const macosRelease = require('macos-release')
 
-const OS_VERSION = 'high_sierra' // todo
+const RELEASE = macosRelease().name.toLowerCase().replace(/\s+/g, '_')
 
 if (isatty(process.stdin)) {
 	process.stdout.write('Usage: brew info --json=v1 | build/bottles-url.js\n')
@@ -37,9 +38,9 @@ readJSON((err, input) => {
 	if (!info || !info.bottle || !info.bottle.stable || !info.bottle.stable.files) {
 		return showError('invalid input')
 	}
-	if (!info.bottle.stable.files[OS_VERSION]) {
-		return showError(`no ${OS_VERSION} version available`)
+	if (!info.bottle.stable.files[RELEASE]) {
+		return showError(`no macOS ${RELEASE} version available`)
 	}
 
-	process.stdout.write(info.bottle.stable.files[OS_VERSION].url + '\n')
+	process.stdout.write(info.bottle.stable.files[RELEASE].url + '\n')
 })

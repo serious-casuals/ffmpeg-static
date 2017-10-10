@@ -34,7 +34,8 @@ download 'https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-32bit-static.
 echo '  extracting'
 $tar_exec -x -C ../bin/linux/ia32 --strip-components 1 -f linux-ia32.tar.xz --wildcards '*/ffmpeg'
 
-# todo: find latest version
-echo 'darwin x64 – downloading from evermeet.cx'
-download 'https://evermeet.cx/pub/ffmpeg/ffmpeg-3.3.3.7z' darwin-x64-ffmpeg.7z
-7zr e -y -bd -o../bin/darwin/x64 darwin-x64-ffmpeg.7z >/dev/null
+echo 'darwin x64 – downloading from Homebrew bottles'
+bottle_url=$(brew info --json=v1 ffmpeg | ./bottle-url.js)
+if [ $? -ne 0 ]; then exit 1; fi
+download $bottle_url darwin-x64-ffmpeg.tar.gz
+$tar_exec -x -C ../bin/darwin/x64 --strip-components 3 -f darwin-x64-ffmpeg.tar.gz --wildcards '*/bin/ffmpeg'
