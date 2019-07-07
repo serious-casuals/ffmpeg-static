@@ -1,14 +1,14 @@
 language: node_js
 node_js:
   - 'stable'
-  - 'lts/*'
-  - "0.10"
 addons:
   apt:
     packages:
       - unzip
       - p7zip
       - tar
+      - tree
 script:
+  - tree
   - npm run build
   - npm test
